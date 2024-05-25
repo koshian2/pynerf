@@ -93,8 +93,10 @@ class RandomSubsetDataManager(DataManager):
 
         self.train_camera_optimizer = self.config.camera_optimizer.setup(
             num_cameras=self.train_dataparser_outputs.cameras.size, device=self.device)
-        self.train_ray_generator = RayGenerator(self.train_dataparser_outputs.cameras.to(self.device),
-                                                self.train_camera_optimizer)
+        # issue : https://github.com/hturki/pynerf/issues/6
+        # self.train_ray_generator = RayGenerator(self.train_dataparser_outputs.cameras.to(self.device),
+        #                                         self.train_camera_optimizer)
+        self.train_ray_generator = RayGenerator(self.train_dataparser_outputs.cameras.to(self.device))
 
         fields_to_load = {RGB}
         for additional_field in {DEPTH, WEIGHT, TRAIN_INDEX}:
@@ -117,8 +119,10 @@ class RandomSubsetDataManager(DataManager):
         self.eval_dataset = InputDataset(self.eval_dataparser_outputs)
         self.eval_camera_optimizer = self.config.camera_optimizer.setup(
             num_cameras=self.eval_dataparser_outputs.cameras.size, device=self.device)
-        self.eval_ray_generator = RayGenerator(self.eval_dataparser_outputs.cameras.to(self.device),
-                                               self.eval_camera_optimizer)
+        # issue : https://github.com/hturki/pynerf/issues/6
+        # self.eval_ray_generator = RayGenerator(self.eval_dataparser_outputs.cameras.to(self.device),
+        #                                        self.eval_camera_optimizer)
+        self.eval_ray_generator = RayGenerator(self.eval_dataparser_outputs.cameras.to(self.device))
 
         self.eval_image_metadata = self._get_image_metadata(self.eval_dataparser_outputs)
         self.eval_batch_dataset = RandomSubsetDataset(
